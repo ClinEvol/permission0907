@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ujiuye.mapper.RoleEmployeeMapper">
+
+    <resultMap id="baseResultMap" type="RoleEmployee">
+        <id property="erid" column="erid"/>
+        <result property="role_fk" column="role_fk"/>
+        <result property="emp_fk" column="emp_fk"/>
+        <result property="erdis" column="erdis"/>
+        <association property="role" javaType="com.ujiuye.pojo.Role"
+                     column="role_fk"
+                     select="com.ujiuye.mapper.RoleMapper.getById"/>
+    </resultMap>
+
+    <select id="listByEmpFk" resultMap="baseResultMap">
+        SELECT * FROM emp_role WHERE emp_fk=#{emp_fk}
+    </select>
+
+    <delete id="removeByEmpFk">
+        DELETE FROM emp_role WHERE emp_fk=#{emp_fk}
+    </delete>
+
+    <insert id="saveList" parameterType="java.util.List">
+        INSERT INTO `emp_role`(`erid`, `role_fk`, `emp_fk`, `erdis`)
+        VALUES
+        <foreach collection="list" item="re" close=";" separator=",">
+            (#{re.erid},#{re.role_fk},#{re.emp_fk},#{re.erdis})
+        </foreach>
+    </insert>
+</mapper>
